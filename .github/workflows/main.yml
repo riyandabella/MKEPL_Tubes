@@ -52,13 +52,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           server-id: github
-          server-username: ${{ github.actor }}
-          server-password: ${{ secrets.GITHUB_TOKEN }}
+          server-username: GITHUB_ACTOR
+          server-password: GITHUB_TOKEN
 
       - name: Build and Publish to GitHub Packages
         env:
+          GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn deploy -DaltDeploymentRepository=github::default::https://maven.pkg.github.com/${{ github.repository }} -DskipTests
+        run: mvn deploy -DskipTests
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
