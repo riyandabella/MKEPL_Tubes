@@ -1,4 +1,5 @@
 package com.calculator;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -36,6 +37,7 @@ public class Main {
 
         JPanel buttonPanel = new JPanel(new GridLayout(5, 4, 5, 5));
         buttonPanel.setBackground(new Color(58, 58, 58));
+
         String[] buttons = {
                 "C", "B", "%", "÷",
                 "7", "8", "9", "×",
@@ -55,10 +57,14 @@ public class Main {
             btn.setForeground(Color.WHITE);
             btn.setFocusPainted(false);
 
-            if (text.equals("C")) btn.setBackground(new Color(192, 57, 43));
-            else if ("+-×÷".contains(text)) btn.setBackground(new Color(243, 156, 18));
-            else if (text.equals("=")) btn.setBackground(new Color(39, 174, 96));
-            else btn.setBackground(new Color(51, 51, 51));
+            if (text.equals("C"))
+                btn.setBackground(new Color(192, 57, 43));
+            else if ("+-×÷".contains(text))
+                btn.setBackground(new Color(243, 156, 18));
+            else if (text.equals("="))
+                btn.setBackground(new Color(39, 174, 96));
+            else
+                btn.setBackground(new Color(51, 51, 51));
 
             btn.addActionListener(e -> handleInput(text));
             buttonPanel.add(btn);
@@ -69,13 +75,15 @@ public class Main {
     }
 
     private static void handleInput(String input) {
+
         if (input.equals("C")) {
             firstNumber = "";
             secondNumber = "";
             operator = "";
             display.setText("");
-        } else if (input.equals("B")) {
-            // Handle Backspace
+        }
+
+        else if (input.equals("B")) {
             if (!secondNumber.isEmpty()) {
                 secondNumber = secondNumber.substring(0, secondNumber.length() - 1);
             } else if (!operator.isEmpty()) {
@@ -83,51 +91,61 @@ public class Main {
             } else if (!firstNumber.isEmpty()) {
                 firstNumber = firstNumber.substring(0, firstNumber.length() - 1);
             }
+
             display.setText(firstNumber + " " + operator + " " + secondNumber);
-        } else if (input.equals("%")) {
-            // Handle Percentage
-            if (!secondNumber.isEmpty()) {
-                try {
+        }
+
+        else if (input.equals("%")) {
+            try {
+                if (!secondNumber.isEmpty()) {
                     double num = Double.parseDouble(secondNumber) / 100;
                     secondNumber = String.valueOf(num);
-                } catch (Exception e) {
-                    display.setText("Error");
-                }
-            } else if (!firstNumber.isEmpty()) {
-                try {
+                } else if (!firstNumber.isEmpty()) {
                     double num = Double.parseDouble(firstNumber) / 100;
                     firstNumber = String.valueOf(num);
-                } catch (Exception e) {
-                    display.setText("Error");
                 }
-            }
-            display.setText(firstNumber + " " + operator + " " + secondNumber);
-        } else if (input.equals("=")) {
-            try {
-                double num1 = Double.parseDouble(firstNumber);
-                double num2 = Double.parseDouble(secondNumber);
-                double result = 0;
 
-                if (operator.equals("+")) result = num1 + num2;
-                else if (operator.equals("-")) result = num1 - num2;
-                else if (operator.equals("×")) result = num1 * num2;
-                else if (operator.equals("÷")) result = num2 != 0 ? num1 / num2 : 0;
+                display.setText(firstNumber + " " + operator + " " + secondNumber);
 
-                display.setText("" + result);
-                firstNumber = "" + result;
-                secondNumber = "";
-                operator = "";
             } catch (Exception e) {
                 display.setText("Error");
             }
-        } else if ("+-×÷".contains(input)) {
+        }
+
+        else if (input.equals("=")) {
+            try {
+                double num1 = Double.parseDouble(firstNumber);
+                double num2 = Double.parseDouble(secondNumber);
+
+                double result = Calculator.calculate(
+                        num1,
+                        num2,
+                        operator);
+
+                display.setText(String.valueOf(result));
+
+                firstNumber = String.valueOf(result);
+                secondNumber = "";
+                operator = "";
+
+            } catch (Exception e) {
+                display.setText("Error");
+            }
+        }
+
+        else if ("+-×÷".contains(input)) {
             if (!firstNumber.isEmpty()) {
                 operator = input;
                 display.setText(firstNumber + " " + operator + " ");
             }
-        } else {
-            if (operator.isEmpty()) firstNumber += input;
-            else secondNumber += input;
+        }
+
+        else {
+            if (operator.isEmpty()) {
+                firstNumber += input;
+            } else {
+                secondNumber += input;
+            }
 
             display.setText(firstNumber + " " + operator + " " + secondNumber);
         }
