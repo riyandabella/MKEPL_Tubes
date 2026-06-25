@@ -61,7 +61,9 @@ jobs:
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn deploy -DskipTests
+        run: |
+          mvn versions:set -DnewVersion=1.0.${{ github.run_number }}
+          mvn deploy -DskipTests
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
