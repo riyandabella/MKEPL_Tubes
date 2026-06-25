@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Main {
+public class Main { 
     private static JTextField display;
     private static String firstNumber = "";
     private static String operator = "";
